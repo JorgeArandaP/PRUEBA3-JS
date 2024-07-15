@@ -70,7 +70,7 @@ async function getValorDivisa() {
 function prepararConfig(data_divisa) {
     const tipodegrafica = 'line';
     const ultimosdiez = data_divisa.serie.slice(-10);
-    const fechas = ultimosdiez.map((moneda) => moneda.fecha);
+    const fechas = ultimosdiez.map((moneda) => moneda.fecha.split('T')[0]);
     const titulo = `${data_divisa.codigo}`;
     const colordelinea = 'green';
     const valores = ultimosdiez.map((moneda) => {
