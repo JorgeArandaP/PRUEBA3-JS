@@ -2,3 +2,8 @@ body{
     font-family: "Kanit", sans-serif;
     
 }
+
+#myChart {
+    background-color: azure;
+    display: none;
+}

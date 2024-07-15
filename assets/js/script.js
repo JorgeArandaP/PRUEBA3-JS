@@ -52,7 +52,6 @@ async function renderValor(monto, moneda) {
 boton.addEventListener('click', () => {
     const monto = document.querySelector('.monto').value;
     const moneda = document.querySelector('.moneda').value;
-    console.log(moneda)
     renderValor(monto, moneda);
     renderGrafica();
 })
@@ -70,13 +69,15 @@ async function getValorDivisa() {
 
 function prepararConfig(data_divisa) {
     const tipodegrafica = 'line';
-    const fechas = data_divisa.serie.map((fecha) => data_divisa.serie.fecha);
+    const ultimosdiez = data_divisa.serie.slice(-10);
+    const fechas = ultimosdiez.map((moneda) => moneda.fecha);
     const titulo = `${data_divisa.codigo}`;
     const colordelinea = 'green';
-    const valores = data_divisa.serie.map((fecha) => {
-        const valor = data_divisa.serie.valor;
+    const valores = ultimosdiez.map((moneda) => {
+        const valor = moneda.valor;
         return Number(valor);
     });
+    
     const config = {
         type: tipodegrafica,
         data: {
@@ -86,19 +87,25 @@ function prepararConfig(data_divisa) {
                     label: titulo,
                     backgroundColor: colordelinea,
                     data: valores
-                    }
+                }
             ]
-        }
+        },
+
     }
-    console.log(config);
     return config;
 
 }
 
+let miGrafico
+
 async function renderGrafica() {
     const data_divisa = await getValorDivisa();
     const config = prepararConfig(data_divisa);
-    const chartDOM = document.getElementById("myChart");
-    new Chart(chartDOM, config);
+    const chartDOM = document.getElementById("myChart");  
+    if (miGrafico) {
+        miGrafico.destroy();
+
+    } 
+    miGrafico = new Chart(chartDOM, config); 
 }
     
